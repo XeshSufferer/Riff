@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Riff.RegisterPage"
+             xmlns:viewmodel="clr-namespace:Riff.ViewModels"
+             x:DataType="viewmodel:RegisterPageViewModel"
+             NavigationPage.HasNavigationBar="False">
+    <Grid RowDefinitions="*, *, *, *, *, Auto" ColumnDefinitions="*, 6*, *">
+
+        <Label Text="Привет." Grid.Column="1" FontSize="48" HorizontalTextAlignment="Center" Margin="15"/>
+        
+        <VerticalStackLayout Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Spacing="20">
+            <Entry Placeholder="Ник" Text="{Binding Nickname}"/>
+            <Entry Placeholder="Логин" Text="{Binding Login}"/>
+            <Entry Placeholder="Пароль" Text="{Binding Password}"/>
+            <Button Text="Создать аккаунт" Command="{Binding RegisterButtonCommand}"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Column="1" Grid.Row="5" Spacing="40">
+            <Label Text="Есть аккаунт? Войти." HorizontalOptions="Center" FontSize="20">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GotoLoginPageCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Text="Dev with ❤️ by Byxesh" FontSize="15" HorizontalTextAlignment="Center"/>
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

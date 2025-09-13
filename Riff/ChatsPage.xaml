@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Riff.ChatsPage"
+             xmlns:models="clr-namespace:Riff.Models"
+             xmlns:viewmodel="clr-namespace:Riff.ViewModels"
+             x:DataType="viewmodel:ChatsPageViewModel"
+             xmlns:behaviors="clr-namespace:Riff.Behaviors"
+             NavigationPage.HasNavigationBar="False">
+    <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, *, Auto">
+
+
+
+        <Label Background="#1B1A3F" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Text="Empty" />
+
+
+
+
+
+        <CollectionView ItemsSource="{Binding Chats}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="3">
+
+
+            <CollectionView.Header>
+                <Border StrokeShape="RoundRectangle 5" Margin="3,3,0,15">
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="Юзернейм: " Margin="25,10,0,0" FontSize="9" TextColor="DimGray"/>
+                        <Label Text="@Username" Margin="15,0,0,15"/>
+                    </VerticalStackLayout>
+                </Border>
+            </CollectionView.Header>
+
+
+            <CollectionView.Footer>
+                <Border StrokeShape="RoundRectangle 5" Margin="10,15">
+                    <VerticalStackLayout Spacing="10">
+                        <Entry Margin="8, 10" Placeholder="@Username" Text="{Binding UsernameForChat}"/>
+                        <Button Text="Новый чат" Margin="8, 10" Command="{Binding CreateChatCommand}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Background="Black" Text="Dev with ❤️ by Byxesh" FontSize="15" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </CollectionView.Footer>
+
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ChatInfo">
+                    <VerticalStackLayout>
+                        <Border StrokeShape="RoundRectangle 5" Margin="10,4" >
+
+
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding ShowChatScreenCommand}"
+                                    NumberOfTapsRequired="1"/>
+                            </Border.GestureRecognizers>
+
+
+                            <Border.Behaviors>
+                                <behaviors:SmoothHoverBehavior 
+                                    HoverScale="0.95" 
+                                    AnimationDuration="170" />
+                            </Border.Behaviors>
+
+
+                            <Grid RowDefinitions="*, *, Auto" ColumnDefinitions="Auto, *, *, *, *, *, *, Auto">
+                                <VerticalStackLayout Spacing="3" Grid.Column="0" Grid.Row="0">
+                                    <Label Text="{Binding ChatName}" FontSize="14" Margin="10,0"/>
+                                    <Label Text="{Binding LastMessage}" FontSize="12" Margin="10,0,10,6" TextColor="DarkGray"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

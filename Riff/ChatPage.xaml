@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Riff.ChatPage"
+             xmlns:models="clr-namespace:Riff.Models"
+             xmlns:viewmodel="clr-namespace:Riff.ViewModels"
+             xmlns:converters="clr-namespace:Riff.Converters"
+             x:DataType="viewmodel:ChatPageViewModel"
+             NavigationPage.HasNavigationBar="False">
+    
+    <ContentPage.Resources>
+        <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <converters:IsCurrentUserConverter x:Key="IsCurrentUserConverter" />
+        <converters:IsNotCurrentUserConverter x:Key="IsNotCurrentUserConverter" />
+    </ContentPage.Resources>
+    
+    <Grid RowDefinitions="Auto, *, Auto">
+        <!-- Заголовок с индикатором загрузки -->
+        <Grid Padding="10" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,8">
+            <Button Text="Назад" Command="{Binding GoBackCommand}"/>
+            <Label Grid.Column="1" Text="{Binding CurrentChatName}" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
+            <ActivityIndicator Grid.Column="2" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" WidthRequest="20" HeightRequest="20"/>
+        </Grid>
+        
+        <!-- Список сообщений -->
+        <CollectionView ItemsSource="{Binding Messages}" Grid.Row="1">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Message">
+                    <Grid Margin="10,4">
+                        <!-- Сообщение от текущего пользователя (справа) -->
+                        <Border StrokeShape="RoundRectangle 5" 
+                                BackgroundColor="#0078D4" 
+                                Margin="50,5,10,5"
+                                IsVisible="{Binding SenderId, Converter={StaticResource IsCurrentUserConverter}}">
+                            <VerticalStackLayout Spacing="3" Margin="10,8">
+                                <Label Text="{Binding Text}" FontSize="14" TextColor="White"/>
+                                <Label Text="{Binding Created, StringFormat='{0:HH:mm}'}" FontSize="12" TextColor="LightGray"/>
+                            </VerticalStackLayout>
+                        </Border>
+                        
+                        <!-- Сообщение от других пользователей (слева) -->
+                        <Border StrokeShape="RoundRectangle 5" 
+                                BackgroundColor="LightGray" 
+                                Margin="10,5,50,5"
+                                IsVisible="{Binding SenderId, Converter={StaticResource IsNotCurrentUserConverter}}">
+                            <VerticalStackLayout Spacing="3" Margin="10,8">
+                                <Label Text="{Binding Text}" FontSize="14" TextColor="Black"/>
+                                <Label Text="{Binding Created, StringFormat='{0:HH:mm}'}" FontSize="12" TextColor="DarkGray"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Поле ввода сообщения -->
+        <Border StrokeShape="RoundRectangle 5" Margin="10,15" Grid.Row="2">
+            <VerticalStackLayout Spacing="10" Margin="8">
+                <Entry Placeholder="Сообщение" Text="{Binding Message}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"/>
+                <Button Text="Отправить" Command="{Binding SendMessageCommand}" IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"/>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>
